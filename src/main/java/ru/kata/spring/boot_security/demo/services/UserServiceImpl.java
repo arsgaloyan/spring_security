@@ -2,62 +2,50 @@ package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleDAO;
-import ru.kata.spring.boot_security.demo.repositories.UserDAO;
+import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserDAO userDAO;
+    private final UserRepository userRepository;
 
-    private final RoleDAO roleDAO;
-
-    public UserServiceImpl(UserDAO userDAO, RoleDAO roleDAO) {
-        this.userDAO = userDAO;
-        this.roleDAO = roleDAO;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public User findByUsername(String username) {
-        return userDAO.findByUsername(username);
+        return userRepository.findByUsername(username);
     }
 
     @Override
     @Transactional
     public void save(User user) {
-        userDAO.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public List<User> findAll() {
-        return userDAO.findAll();
+        return userRepository.findAll();
     }
 
     @Override
     public User getById(Long id) {
-        return userDAO.getById(id);
+        return userRepository.getById(id);
     }
 
     @Override
     @Transactional
-    public void update(Long id, User updatedUser) {
-        Optional<User> userToBeUpdated = userDAO.findById(id);
-
-        userToBeUpdated.get().setUsername(updatedUser.getUsername());
-        userToBeUpdated.get().setEmail(updatedUser.getEmail());
-        userToBeUpdated.get().setRoles(updatedUser.getRoles());
+    public void update(User updatedUser) {
+        userRepository.save(updatedUser);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        userDAO.delete(getById(id));
+        userRepository.delete(getById(id));
     }
 }

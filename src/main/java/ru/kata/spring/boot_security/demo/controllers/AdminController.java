@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Controller
@@ -20,8 +24,11 @@ public class AdminController {
 
     private final UserService userService;
 
-    public AdminController(UserService userService) {
+    private final RoleService roleService;
+
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping
@@ -41,8 +48,12 @@ public class AdminController {
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(User user, Role role, Model model) {
-        model.addAttribute("role", role);
+    public String saveUser(@ModelAttribute("user") User user, @ModelAttribute("role") Role role) {
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
+
         userService.save(user);
 
         return "redirect:/admin/showAllUsers";
@@ -61,8 +72,20 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
-        userService.update(id, user);
+    public String update(@ModelAttribute("user") User user,
+                         @ModelAttribute("role") Role role) {
+
+       if (role.getName().equals("ROLE_USER")) {
+           role.setId(1L);
+       } else {
+           role.setId(2L);
+       }
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
+
+        userService.update(user);
+
         return "redirect:/admin/showAllUsers";
     }
 

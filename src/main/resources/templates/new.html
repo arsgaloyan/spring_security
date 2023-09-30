@@ -7,21 +7,23 @@
 <body>
 
 <form action="#" th:action="@{saveUser}" th:object="${user}" th:method="post">
-  <label for="name">Enter name: </label>
-  <input type="text" th:field="*{username}" id="name"/>
-  <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
-  <br/>
-  <label for="email">Enter email: </label>
-  <input type="text" th:field="*{email}" id="email"/>
-  <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
-  <br>
+    <label for="name">Enter name: </label>
+    <input type="text" th:field="*{username}" id="name"/>
+    <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+    <br/>
+    <label for="email">Enter email: </label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+    <br>
 
-  <label for="role">Enter role: </label>
-  <input type="text" th:field="*{roles}" id="role"/>
-  <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Roles error</div>
-  <h2>Число 1 - ROLE_USER, Число 2 - ROLE_ADMIN</h2>
-  <br>
-  <input type="submit" value="Create!"/>
+    <label for="role">Выберите роль:</label>
+    <select id="role" name="role">
+        <option value="1">ROLE_USER</option>
+        <option value="2">ROLE_ADMIN</option>
+    </select>
+    <br>
+
+    <input type="submit" value="Create!"/>
 
 </form>
 </body>
