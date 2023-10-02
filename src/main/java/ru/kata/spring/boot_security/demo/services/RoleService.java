@@ -6,6 +6,7 @@ import java.util.List;
 
 
 public interface RoleService {
+    Role save(Role entity);
 
     Role findById(Long id);
 

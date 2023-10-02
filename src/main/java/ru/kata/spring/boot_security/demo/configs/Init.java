@@ -22,8 +22,12 @@ public class Init {
         this.userService = userService;
     }
 
+
     @PostConstruct
     public void saveUsers() {
+        roleService.save(new Role("ROLE_USER"));
+        roleService.save(new Role("ROLE_ADMIN"));
+
         Set<Role> adminRole = new HashSet<>();
         adminRole.add(roleService.findById(2L));
         userService.save(new User("admin"
@@ -33,10 +37,9 @@ public class Init {
 
         Set<Role> userRole = new HashSet<>();
         userRole.add(roleService.findById(1L));
-
         userService.save(new User("user"
-                ,"user@mail.ru"
-                ,"$2a$12$eX9DWORhFqWjTnEqTOGXLuMqdHhJXXIYgBiXtDDRc.qUYJXtm4AKG"
+                , "user@mail.ru"
+                , "$2a$12$eX9DWORhFqWjTnEqTOGXLuMqdHhJXXIYgBiXtDDRc.qUYJXtm4AKG"
                 , userRole));
     }
 }
