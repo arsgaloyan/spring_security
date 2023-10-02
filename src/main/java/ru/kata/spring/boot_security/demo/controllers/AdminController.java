@@ -9,13 +9,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
-
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Controller
@@ -38,22 +34,18 @@ public class AdminController {
 
     @GetMapping("/showAllUsers")
     public String showAllUsers(Model model) {
-        model.addAttribute("user", userService.findAll());
+        model.addAttribute("users", userService.findAll());
         return "show-all";
     }
 
     @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user) {
+    public String newUser(@ModelAttribute("user") User user, Model model) {
+        model.addAttribute("roles", roleService.getAllRoles());
         return "new";
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user, @ModelAttribute("role") Role role) {
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
-
+    public String saveUser(@ModelAttribute("user") User user) {
         userService.save(user);
 
         return "redirect:/admin/showAllUsers";
@@ -68,22 +60,12 @@ public class AdminController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") Long id) {
         model.addAttribute("user", userService.getById(id));
+        model.addAttribute("roles", roleService.getAllRoles());
         return "edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user,
-                         @ModelAttribute("role") Role role) {
-
-       if (role.getName().equals("ROLE_USER")) {
-           role.setId(1L);
-       } else {
-           role.setId(2L);
-       }
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
-
+    public String update(@ModelAttribute("user") User user) {
         userService.update(user);
 
         return "redirect:/admin/showAllUsers";

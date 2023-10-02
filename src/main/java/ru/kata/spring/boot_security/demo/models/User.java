@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -43,9 +43,10 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String email, Set<Role> roles) {
+    public User(String username, String email, String password, Set<Role> roles) {
         this.username = username;
         this.email = email;
+        this.password = password;
         this.roles = roles;
     }
 

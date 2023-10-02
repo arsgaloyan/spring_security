@@ -16,12 +16,21 @@
     <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
     <br>
 
-    <label for="role">Выберите роль:</label>
-    <select id="role" name="role">
-        <option value="1">ROLE_USER</option>
-        <option value="2">ROLE_ADMIN</option>
-    </select>
+    <label for="password">Enter password: </label>
+    <input type="password" th:field="*{password}" id="password"/>
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
     <br>
+
+    <select class="form-control" id="roles"
+            name="roles"
+            multiple="multiple">
+        <option th:each="role: ${roles}"
+                th:selected="${role.getName()}"
+                th:value="${role.getId()}"
+                th:text="${role.getName()}">Role name
+        </option>
+    </select>
+
 
     <input type="submit" value="Create!"/>
 
